@@ -45,11 +45,11 @@ def min_func(fun, bounds_min, bounds_max, d=None, rmax=10,
     Rx = [[]] * (d + 1)  # Python list for the interfaces
     Rx[0] = np.ones((1, 1))
     Rx[d] = np.ones((1, 1))
-    Jy = [np.empty(0, dtype=np.int)] * (d + 1)
-    ry = rmax * np.ones(d + 1, dtype=np.int)
+    Jy = [np.empty(0, dtype=int)] * (d + 1)
+    ry = rmax * np.ones(d + 1, dtype=int)
     ry[0] = 1
     ry[d] = 1
-    n = n0 * np.ones(d, dtype=np.int)
+    n = n0 * np.ones(d, dtype=int)
     fun_evals = 0
 
     grid = [np.reshape(np.linspace(a[i], b[i], n[i]), (n[i], 1))
@@ -61,8 +61,8 @@ def min_func(fun, bounds_min, bounds_max, d=None, rmax=10,
         cr1 = reshape(cr1, (ry[i] * n[i], ry[i + 1]))
         q, r = np.linalg.qr(cr1)
         ind = maxvol(q)
-        w1 = mkron(np.ones((n[i], 1), dtype=np.int), Jy[i])
-        w2 = mkron(grid[i], np.ones((ry[i], 1), dtype=np.int))
+        w1 = mkron(np.ones((n[i], 1), dtype=int), Jy[i])
+        w2 = mkron(grid[i], np.ones((ry[i], 1), dtype=int))
         Jy[i + 1] = np.hstack((w1, w2))
         Jy[i + 1] = reshape(Jy[i + 1], (ry[i] * n[i], -1))
         Jy[i + 1] = Jy[i + 1][ind, :]
@@ -80,15 +80,15 @@ def min_func(fun, bounds_min, bounds_max, d=None, rmax=10,
         # Compute the current core
 
         if np.size(Jy[i]) == 0:
-            w1 = np.zeros((ry[i] * n[i] * ry[i + 1], 0), dtype=np.int)
+            w1 = np.zeros((ry[i] * n[i] * ry[i + 1], 0), dtype=int)
         else:
-            w1 = mkron(np.ones((n[i] * ry[i + 1], 1), dtype=np.int), Jy[i])
-        w2 = mkron(mkron(np.ones((ry[i + 1], 1), dtype=np.int),
-                         grid[i]), np.ones((ry[i], 1), dtype=np.int))
+            w1 = mkron(np.ones((n[i] * ry[i + 1], 1), dtype=int), Jy[i])
+        w2 = mkron(mkron(np.ones((ry[i + 1], 1), dtype=int),
+                         grid[i]), np.ones((ry[i], 1), dtype=int))
         if np.size(Jy[i + 1]) == 0:
-            w3 = np.zeros((ry[i] * n[i] * ry[i + 1], 0), dtype=np.int)
+            w3 = np.zeros((ry[i] * n[i] * ry[i + 1], 0), dtype=int)
         else:
-            w3 = mkron(Jy[i + 1], np.ones((ry[i] * n[i], 1), dtype=np.int))
+            w3 = mkron(Jy[i + 1], np.ones((ry[i] * n[i], 1), dtype=int))
 
         J = np.hstack((w1, w2, w3))
         # Just add some random indices to J, which is rnr x d, need to make rn (r + r0) x add,
@@ -115,11 +115,11 @@ def min_func(fun, bounds_min, bounds_max, d=None, rmax=10,
             q = u[:, :ry[i]]
             ind = rect_maxvol(q)[0]  # maxvol(q)
             ry[i] = ind.size
-            w1 = mkron(np.ones((ry[i + 1], 1), dtype=np.int), grid[i])
+            w1 = mkron(np.ones((ry[i + 1], 1), dtype=int), grid[i])
             if np.size(Jy[i + 1]) == 0:
-                w2 = np.zeros((n[i] * ry[i + 1], 0), dtype=np.int)
+                w2 = np.zeros((n[i] * ry[i + 1], 0), dtype=int)
             else:
-                w2 = mkron(Jy[i + 1], np.ones((n[i], 1), dtype=np.int))
+                w2 = mkron(Jy[i + 1], np.ones((n[i], 1), dtype=int))
             Jy[i] = np.hstack((w1, w2))
             Jy[i] = reshape(Jy[i], (n[i] * ry[i + 1], -1))
             Jy[i] = Jy[i][ind, :]
@@ -130,8 +130,8 @@ def min_func(fun, bounds_min, bounds_max, d=None, rmax=10,
             #ind = maxvol(q)
             ind = rect_maxvol(q)[0]
             ry[i + 1] = ind.size
-            w1 = mkron(np.ones((n[i], 1), dtype=np.int), Jy[i])
-            w2 = mkron(grid[i], np.ones((ry[i], 1), dtype=np.int))
+            w1 = mkron(np.ones((n[i], 1), dtype=int), Jy[i])
+            w2 = mkron(grid[i], np.ones((ry[i], 1), dtype=int))
             Jy[i + 1] = np.hstack((w1, w2))
             Jy[i + 1] = reshape(Jy[i + 1], (ry[i] * n[i], -1))
             Jy[i + 1] = Jy[i + 1][ind, :]
@@ -152,8 +152,8 @@ def min_tens(tens, rmax=10, nswp=10, verb=True, smooth_fun=None):
     Rx = [[]] * (d + 1)  # Python list for the interfaces
     Rx[0] = np.ones((1, 1))
     Rx[d] = np.ones((1, 1))
-    Jy = [np.empty(0, dtype=np.int)] * (d + 1)
-    ry = rmax * np.ones(d + 1, dtype=np.int)
+    Jy = [np.empty(0, dtype=int)] * (d + 1)
+    ry = rmax * np.ones(d + 1, dtype=int)
     ry[0] = 1
     ry[d] = 1
     n = tens.n
@@ -169,8 +169,8 @@ def min_tens(tens, rmax=10, nswp=10, verb=True, smooth_fun=None):
     for i in xrange(d - 1):
         ry[i + 1] = min(ry[i + 1], n[i] * ry[i])
         ind = sorted(np.random.permutation(ry[i] * n[i])[0:ry[i + 1]])
-        w1 = mkron(np.ones((n[i], 1), dtype=np.int), Jy[i])
-        w2 = mkron(grid[i], np.ones((ry[i], 1), dtype=np.int))
+        w1 = mkron(np.ones((n[i], 1), dtype=int), Jy[i])
+        w2 = mkron(grid[i], np.ones((ry[i], 1), dtype=int))
         Jy[i + 1] = np.hstack((w1, w2))
         Jy[i + 1] = reshape(Jy[i + 1], (ry[i] * n[i], -1))
         Jy[i + 1] = Jy[i + 1][ind, :]
@@ -188,15 +188,15 @@ def min_tens(tens, rmax=10, nswp=10, verb=True, smooth_fun=None):
         # Compute the current core
 
         if np.size(Jy[i]) == 0:
-            w1 = np.zeros((ry[i] * n[i] * ry[i + 1], 0), dtype=np.int)
+            w1 = np.zeros((ry[i] * n[i] * ry[i + 1], 0), dtype=int)
         else:
-            w1 = mkron(np.ones((n[i] * ry[i + 1], 1), dtype=np.int), Jy[i])
-        w2 = mkron(mkron(np.ones((ry[i + 1], 1), dtype=np.int),
-                         grid[i]), np.ones((ry[i], 1), dtype=np.int))
+            w1 = mkron(np.ones((n[i] * ry[i + 1], 1), dtype=int), Jy[i])
+        w2 = mkron(mkron(np.ones((ry[i + 1], 1), dtype=int),
+                         grid[i]), np.ones((ry[i], 1), dtype=int))
         if np.size(Jy[i + 1]) == 0:
-            w3 = np.zeros((ry[i] * n[i] * ry[i + 1], 0), dtype=np.int)
+            w3 = np.zeros((ry[i] * n[i] * ry[i + 1], 0), dtype=int)
         else:
-            w3 = mkron(Jy[i + 1], np.ones((ry[i] * n[i], 1), dtype=np.int))
+            w3 = mkron(Jy[i + 1], np.ones((ry[i] * n[i], 1), dtype=int))
         J = np.hstack((w1, w2, w3))
 
         phi_right[i] = np.tensordot(cores[i], phi_right[i + 1], 1)
@@ -226,11 +226,11 @@ def min_tens(tens, rmax=10, nswp=10, verb=True, smooth_fun=None):
             q = u[:, :ry[i]]
             ind = rect_maxvol(q)[0]  # maxvol(q)
             ry[i] = ind.size
-            w1 = mkron(np.ones((ry[i + 1], 1), dtype=np.int), grid[i])
+            w1 = mkron(np.ones((ry[i + 1], 1), dtype=int), grid[i])
             if np.size(Jy[i + 1]) == 0:
-                w2 = np.zeros((n[i] * ry[i + 1], 0), dtype=np.int)
+                w2 = np.zeros((n[i] * ry[i + 1], 0), dtype=int)
             else:
-                w2 = mkron(Jy[i + 1], np.ones((n[i], 1), dtype=np.int))
+                w2 = mkron(Jy[i + 1], np.ones((n[i], 1), dtype=int))
             Jy[i] = np.hstack((w1, w2))
             Jy[i] = reshape(Jy[i], (n[i] * ry[i + 1], -1))
             Jy[i] = Jy[i][ind, :]
@@ -247,8 +247,8 @@ def min_tens(tens, rmax=10, nswp=10, verb=True, smooth_fun=None):
             phi_left[i + 1] = np.tensordot(phi_left[i], cores[i], 1)
             phi_left[i + 1] = reshape(phi_left[i + 1], (ry[i] * n[i], -1))
             phi_left[i + 1] = phi_left[i + 1][ind, :]
-            w1 = mkron(np.ones((n[i], 1), dtype=np.int), Jy[i])
-            w2 = mkron(grid[i], np.ones((ry[i], 1), dtype=np.int))
+            w1 = mkron(np.ones((n[i], 1), dtype=int), Jy[i])
+            w2 = mkron(grid[i], np.ones((ry[i], 1), dtype=int))
             Jy[i + 1] = np.hstack((w1, w2))
             Jy[i + 1] = reshape(Jy[i + 1], (ry[i] * n[i], -1))
             Jy[i + 1] = Jy[i + 1][ind, :]
