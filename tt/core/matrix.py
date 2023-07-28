@@ -52,11 +52,11 @@ class matrix(object):
     @property
     def r(self):
         return self.tt.r
-    
+
     @property
     def d(self):
         return self.tt.d
-    
+
     @staticmethod
     def from_list(a):
         d = len(a)  # Number of cores
@@ -168,7 +168,7 @@ class matrix(object):
 
         """
         tmp = self.tt.copy()
-        newcore = _np.array(tmp.core, dtype=_np.complex)
+        newcore = _np.array(tmp.core, dtype=complex)
         cr = newcore[tmp.ps[-2] - 1:tmp.ps[-1] - 1]
         cr = cr.reshape((tmp.r[-2], tmp.n[-1], tmp.r[-1]), order='F')
         cr[:, 1, :] *= 1j
@@ -245,8 +245,8 @@ class matrix(object):
         if L.is_complex or R.is_complex:
             res.r = _core_f90.core.zmat_mat(
                 L.n, L.m, R.m, _np.array(
-                    L.tt.core, dtype=_np.complex), _np.array(
-                    R.tt.core, dtype=_np.complex), L.tt.r, R.tt.r)
+                    L.tt.core, dtype=complex), _np.array(
+                    R.tt.core, dtype=complex), L.tt.r, R.tt.r)
             res.core = _core_f90.core.zresult_core.copy()
         else:
             res.r = _core_f90.core.dmat_mat(
