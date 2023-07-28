@@ -46,7 +46,7 @@ def multifuncrs2(X, funs, eps=1e-6,
     d = X[0].d
     n = X[0].n
     rx = np.transpose(np.array([ttx.r for ttx in X]))
-    crx = np.empty((nx, d), dtype=np.object)
+    crx = np.empty((nx, d), dtype=object)
     i = 0
     for ttx in X:
         v = tt.tensor.to_list(ttx)
@@ -73,19 +73,19 @@ def multifuncrs2(X, funs, eps=1e-6,
     cry = tt.tensor.to_list(y)
     # Interface matrices - for solution
     one_arr = np.ones((1, 1), dtype=dtype)
-    Ry = np.zeros((d + 1, ), dtype=np.object)
+    Ry = np.zeros((d + 1, ), dtype=object)
     Ry[0] = one_arr
     Ry[d] = one_arr
-    Rx = np.zeros((d + 1, nx), dtype=np.object)
+    Rx = np.zeros((d + 1, nx), dtype=object)
     Rx[0, :] = np.ones(nx, dtype=dtype)
     Rx[d, :] = np.ones(nx, dtype=dtype)
-    Ryz = np.zeros((d + 1, ), dtype=np.object)
+    Ryz = np.zeros((d + 1, ), dtype=object)
     Ryz[0] = one_arr
     Ryz[d] = one_arr
-    Rz = np.zeros((d + 1, ), dtype=np.object)
+    Rz = np.zeros((d + 1, ), dtype=object)
     Rz[0] = one_arr
     Rz[d] = one_arr
-    Rxz = np.zeros((d + 1, nx), dtype=np.object)
+    Rxz = np.zeros((d + 1, nx), dtype=object)
     Rxz[0, :] = np.ones(nx, dtype=dtype)
     Rxz[d, :] = np.ones(nx, dtype=dtype)
     block_order = [+d, -d]
