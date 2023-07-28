@@ -674,12 +674,12 @@ def linspace(n, d=None, a=0.0, b=1.0, right=True, left=True):
 def sin(d, alpha=1.0, phase=0.0):
     """ Create TT-vector for :math:`\\sin(\\alpha n + \\varphi)`."""
     cr = []
-    cur_core = _np.zeros([1, 2, 2], dtype=_np.float)
+    cur_core = _np.zeros([1, 2, 2], dtype=float)
     cur_core[0, 0, :] = [_math.cos(phase), _math.sin(phase)]
     cur_core[0, 1, :] = [_math.cos(alpha + phase), _math.sin(alpha + phase)]
     cr.append(cur_core)
     for i in xrange(1, d - 1):
-        cur_core = _np.zeros([2, 2, 2], dtype=_np.float)
+        cur_core = _np.zeros([2, 2, 2], dtype=float)
         cur_core[0, 0, :] = [1.0, 0.0]
         cur_core[1, 0, :] = [0.0, 1.0]
         cur_core[
@@ -697,7 +697,7 @@ def sin(d, alpha=1.0, phase=0.0):
         :] = [-_math.sin(alpha * 2 ** i),
               _math.cos(alpha * 2 ** i)]
         cr.append(cur_core)
-    cur_core = _np.zeros([2, 2, 1], dtype=_np.float)
+    cur_core = _np.zeros([2, 2, 1], dtype=float)
     cur_core[0, :, 0] = [0.0, _math.sin(alpha * 2 ** (d - 1))]
     cur_core[1, :, 0] = [1.0, _math.cos(alpha * 2 ** (d - 1))]
     cr.append(cur_core)
@@ -797,7 +797,7 @@ def stepfun(n, d=None, center=1, direction=1):
         break_further = max([0] + cind[:i])
         nextrank = 2 if break_further else 1
         one = [1] * n0[i]
-        cr = _np.zeros([nextrank, n0[i], prevrank], dtype=_np.float)
+        cr = _np.zeros([nextrank, n0[i], prevrank], dtype=float)
         tempx = x(cind[i], n0[i])
         tempnotx = notx(cind[i], n0[i])
         # high-conditional magic
