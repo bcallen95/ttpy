@@ -201,14 +201,14 @@ class vector(object):
         newcrs = []
         cr = crs[0]
         rl, n, rr = cr.shape
-        newcr = _np.zeros((rl, n, rr * 2), dtype=_np.float)
+        newcr = _np.zeros((rl, n, rr * 2), dtype=float)
         newcr[:, :, :rr] = _np.real(cr)
         newcr[:, :, rr:] = _np.imag(cr)
         newcrs.append(newcr)
         for i in xrange(1, self.d - 1):
             cr = crs[i]
             rl, n, rr = cr.shape
-            newcr = _np.zeros((rl * 2, n, rr * 2), dtype=_np.float)
+            newcr = _np.zeros((rl * 2, n, rr * 2), dtype=float)
             newcr[:rl, :, :rr] = newcr[rl:, :, rr:] = _np.real(cr)
             newcr[:rl, :, rr:] = _np.imag(cr)
             newcr[rl:, :, :rr] = -_np.imag(cr)
@@ -217,33 +217,33 @@ class vector(object):
         rl, n, rr = cr.shape
         if op in ['R', 'r', 'Re']:
             # get real part
-            newcr = _np.zeros((rl * 2, n, rr), dtype=_np.float)
+            newcr = _np.zeros((rl * 2, n, rr), dtype=float)
             newcr[:rl, :, :] = _np.real(cr)
             newcr[rl:, :, :] = -_np.imag(cr)
         elif op in ['I', 'i', 'Im']:
             # get imaginary part
-            newcr = _np.zeros((rl * 2, n, rr), dtype=_np.float)
+            newcr = _np.zeros((rl * 2, n, rr), dtype=float)
             newcr[:rl, :, :] = _np.imag(cr)
             newcr[rl:, :, :] = _np.real(cr)
         elif op in ['A', 'B', 'all', 'both']:
             # get both parts (increase dimensionality)
-            newcr = _np.zeros((rl * 2, n, 2 * rr), dtype=_np.float)
+            newcr = _np.zeros((rl * 2, n, 2 * rr), dtype=float)
             newcr[:rl, :, :rr] = _np.real(cr)
             newcr[rl:, :, :rr] = -_np.imag(cr)
             newcr[:rl, :, rr:] = _np.imag(cr)
             newcr[rl:, :, rr:] = _np.real(cr)
             newcrs.append(newcr)
-            newcr = _np.zeros((rr * 2, 2, 1), dtype=_np.float)
+            newcr = _np.zeros((rr * 2, 2, 1), dtype=float)
             newcr[:rr, 0, :] = newcr[rr:, 1, :] = 1.0
         elif op in ['M']:
             # get matrix modificated for real-arithm. solver
-            newcr = _np.zeros((rl * 2, n, 2 * rr), dtype=_np.float)
+            newcr = _np.zeros((rl * 2, n, 2 * rr), dtype=float)
             newcr[:rl, :, :rr] = _np.real(cr)
             newcr[rl:, :, :rr] = -_np.imag(cr)
             newcr[:rl, :, rr:] = _np.imag(cr)
             newcr[rl:, :, rr:] = _np.real(cr)
             newcrs.append(newcr)
-            newcr = _np.zeros((rr * 2, 4, 1), dtype=_np.float)
+            newcr = _np.zeros((rr * 2, 4, 1), dtype=float)
             newcr[:rr, [0, 3], :] = 1.0
             newcr[rr:, 1, :] = 1.0
             newcr[rr:, 2, :] = -1.0
@@ -293,7 +293,7 @@ class vector(object):
 
         """
         tmp = self.copy()
-        newcore = _np.array(tmp.core, dtype=_np.complex)
+        newcore = _np.array(tmp.core, dtype=complex)
         cr = newcore[tmp.ps[-2] - 1:tmp.ps[-1] - 1]
         cr = cr.reshape((tmp.r[-2], tmp.n[-1], tmp.r[-1]), order='F')
         cr[:, 1, :] *= 1j
@@ -474,7 +474,7 @@ class vector(object):
         r2 = other.r
         d = self.d
         if (_np.iscomplex(self.core).any() or _np.iscomplex(other.core).any()):
-            dt = _np.zeros(r1[0] * r2[0] * r1[d] * r2[d], dtype=_np.complex)
+            dt = _np.zeros(r1[0] * r2[0] * r1[d] * r2[d], dtype=complex)
             dt = _tt_f90.tt_f90.ztt_dotprod(
                 self.n,
                 r1,
@@ -554,7 +554,7 @@ class vector(object):
             _np.int32)
 
     def alloc_core(self):
-        self.core = _np.zeros((self.ps[self.d] - 1,), dtype=_np.float)
+        self.core = _np.zeros((self.ps[self.d] - 1,), dtype=float)
 
     def copy(self):
         c = vector()
@@ -577,53 +577,53 @@ class vector(object):
         r = 0.5 * (-b + _np.sqrt(D)) / a
         return r
 
-    def qtt_fft1(self,tol,inverse=False, bitReverse=True): 
+    def qtt_fft1(self,tol,inverse=False, bitReverse=True):
         """ Compute 1D (inverse) discrete Fourier Transform in the QTT format.
         :param tol: error tolerance.
-        :type tol: float 
-        
+        :type tol: float
+
         :param inverse: whether do an inverse FFT or not.
-        :type inverse: Boolean 
-        
+        :type inverse: Boolean
+
         :param bitReverse: whether do the bit reversion or not. If this function is used as a subroutine for multi-dimensional qtt-fft, this option
         need to be set False.
         :type bitReverse: Boolean.
-        
-        :returns: QTT-vector of FFT coefficients. 
- 
+
+        :returns: QTT-vector of FFT coefficients.
+
         This is a python translation of the Matlab function "qtt_fft1" in Ivan Oseledets' project TT-Toolbox(https://github.com/oseledets/TT-Toolbox)
-       
-        See S. Dolgov, B. Khoromskij, D. Savostyanov, 
+
+        See S. Dolgov, B. Khoromskij, D. Savostyanov,
         Superfast Fourier transform using QTT approximation,
         J. Fourier Anal. Appl., 18(5), 2012.
         """
-    
-        d = self.d 
+
+        d = self.d
         r = self.r.copy()
-        y = self.to_list(self)   
-        
+        y = self.to_list(self)
+
         if inverse:
             twiddle =-1+1.22e-16j # exp(pi*1j)
         else:
             twiddle =-1-1.22e-16j # exp(-pi*1j)
-        
+
         for i in range(d-1, 0, -1):
-            
+
             r1= y[i].shape[0]   # head r
             r2= y[i].shape[2]   # tail r
-            crd2 = _np.zeros((r1, 2, r2), order='F',  dtype=complex) 
+            crd2 = _np.zeros((r1, 2, r2), order='F',  dtype=complex)
             # last block +-
             crd2[:,0,:]= (y[i][:,0,:] + y[i][:,1,:])/_np.sqrt(2)
-            crd2[:,1,:]= (y[i][:,0,:] - y[i][:,1,:])/_np.sqrt(2)           
+            crd2[:,1,:]= (y[i][:,0,:] - y[i][:,1,:])/_np.sqrt(2)
             # last block twiddles
-            y[i]= _np.zeros((r1*2, 2, r2),order='F',dtype=complex) 
+            y[i]= _np.zeros((r1*2, 2, r2),order='F',dtype=complex)
             y[i][0:r1,    0, 0:r2]= crd2[:,0,:]
             y[i][r1:r1*2, 1, 0:r2]= crd2[:,1,:]
             #1..i-1 block twiddles and qr
-            rv=1; 
-            
+            rv=1;
+
             for j in range(0, i):
-            
+
                 cr=y[j]
                 r1= cr.shape[0]   # head r
                 r2= cr.shape[2]   # tail r
@@ -631,27 +631,27 @@ class vector(object):
                     r[j]=r1
                     r[j+1] = r2*2
                     y[j] = _np.zeros((r[j], 2, r[j+1]),order='F',dtype=complex)
-                    y[j][0:r1, :, 0:r2] = cr 
-                    y[j][0:r1, 0, r2 :r[j+1]] = cr[:,0,:] 
+                    y[j][0:r1, :, 0:r2] = cr
+                    y[j][0:r1, 0, r2 :r[j+1]] = cr[:,0,:]
                     y[j][0:r1, 1, r2 :r[j+1]] = twiddle**(1.0/(2**(i-j)))*cr[:,1,:]
                 else:
                     r[j]=r1*2
                     r[j+1] = r2*2
                     y[j] = _np.zeros((r[j], 2, r[j+1]),order='F',dtype=complex)
-                    y[j][0:r1, :, 0:r2] = cr 
-                    y[j][r1:r[j], 0, r2 :r[j+1]] = cr[:,0,:] 
+                    y[j][0:r1, :, 0:r2] = cr
+                    y[j][r1:r[j], 0, r2 :r[j+1]] = cr[:,0,:]
                     y[j][r1:r[j], 1, r2 :r[j+1]] = twiddle**(1.0/(2**(i-j)))*cr[:,1,:]
-                        
-                    
+
+
                 y[j] = _np.reshape(y[j],( r[j], 2*r[j+1]),order='F')
                 y[j] = _np.dot(rv,y[j])
                 r[j] = y[j].shape[0]
                 y[j] = _np.reshape(y[j],( 2*r[j],  r[j+1]),order='F')
-                
+
                 y[j], rv = _np.linalg.qr(y[j])
                 y[j] = _np.reshape(y[j], (r[j], 2, rv.shape[0]),order='F')
-            
-            y[i] = _np.reshape(y[i], (r[i], 2*r[i+1]),order='F')  
+
+            y[i] = _np.reshape(y[i], (r[i], 2*r[i+1]),order='F')
             y[i] = _np.dot(rv,y[i])
             r[i] = rv.shape[0]
             # backward svd
@@ -659,33 +659,33 @@ class vector(object):
                 u,s,v = _np.linalg.svd(y[j], full_matrices=False)
                 rnew = my_chop2(s, _np.linalg.norm(s)*tol/_np.sqrt(i))
                 u=_np.dot(u[:, 0:rnew], _np.diag(s[0:rnew]))
-                v= v[0:rnew, :] 
+                v= v[0:rnew, :]
                 y[j] = _np.reshape(v, (rnew, 2, r[j+1]),order='F' )
                 y[j-1] = _np.reshape(y[j-1], (r[j-1]*2,r[j] ),order='F' )
                 y[j-1] = _np.dot(y[j-1], u)
                 r[j] = rnew
                 y[j-1] = _np.reshape(y[j-1], (r[j-1],r[j]*2 ),order='F' )
-                
+
             y[0] = _np.reshape(y[0], (r[0],2, r[1]), order='F' )
-        
+
         # FFT on the first block
         y[0]=_np.transpose(y[0],(1,0,2))
         y[0]=_np.reshape(y[0],(2, r[0]*r[1]),order='F')
         y[0]= _np.dot( _np.array([[1,1],[1,-1]]), y[0])/_np.sqrt(2)
         y[0]=_np.reshape(y[0],(2, r[0], r[1]),order='F')
         y[0]=_np.transpose(y[0],(1,0,2))
-        
+
         if bitReverse:
             # Reverse the train
             y2=[None]*d
             for i in range(d):
                 y2[d-i-1]= _np.transpose(y[i],(2,1,0))
-            
+
             y=self.from_list(y2)
         else: # for multi-dimensional qtt_fft
             y=self.from_list(y)
-        return y        
-        
+        return y
+
 def _hdm(a, b):
     c = vector()
     c.d = a.d
@@ -702,7 +702,7 @@ def _hdm(a, b):
         c.core = _tt_f90.tt_f90.core.copy()
     _tt_f90.tt_f90.tt_dealloc()
     return c
-        
+
 class tensor(vector):  # For combatibility issues
 
     def __init__(self, *args, **kwargs):
