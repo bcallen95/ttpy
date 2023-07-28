@@ -83,8 +83,8 @@ def multifuncrs(X, funs, eps=1E-6,
     #crx = [tt.tensor.to_list(ttx) for x in X]
     #crx = zip(*crx)
     crx = np.transpose(np.array([tt.tensor.to_list(ttx)
-                                 for ttx in X], dtype=np.object))
-    crx = np.empty((nx, d), dtype=np.object)
+                                 for ttx in X], dtype=object))
+    crx = np.empty((nx, d), dtype=object)
     i = 0
     for ttx in X:
         v = tt.tensor.to_list(ttx)
@@ -103,10 +103,10 @@ def multifuncrs(X, funs, eps=1E-6,
     ry = y.r
     cry = tt.tensor.to_list(y)
 
-    Ry = np.zeros((d + 1, ), dtype=np.object)
+    Ry = np.zeros((d + 1, ), dtype=object)
     Ry[0] = np.array([[1.0]], dtype=dtype)
     Ry[d] = np.array([[1.0]], dtype=dtype)
-    Rx = np.zeros((d + 1, nx), dtype=np.object)
+    Rx = np.zeros((d + 1, nx), dtype=object)
     Rx[0, :] = np.ones(nx, dtype=dtype)
     Rx[d, :] = np.ones(nx, dtype=dtype)
 
