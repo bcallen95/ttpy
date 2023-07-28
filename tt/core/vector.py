@@ -137,7 +137,7 @@ class vector(object):
                 er = 0e0
             else:
                 b = r[0] * n[0] + n[d - 1] * r[d]
-                if d is 2:
+                if d == 2:
                     er = sz * 1.0 / b
                 else:
                     a = _np.sum(n[1:d - 1])
@@ -490,7 +490,7 @@ class vector(object):
                 self.n, r1, r2, self.ps, other.ps, _np.real(
                     self.core), _np.real(
                     other.core), dt.size)
-        if dt.size is 1:
+        if dt.size == 1:
             dt = dt[0]
         return dt
 
