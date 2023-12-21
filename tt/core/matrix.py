@@ -342,7 +342,7 @@ class matrix(object):
         c.alloc_core()
         # Actually copy the data
         for i in xrange(c.d):
-            cur_core1 = _np.zeros((c.r[i], c.n[i], c.r[i + 1]))
+            cur_core1 = _np.zeros((c.r[i], c.n[i], c.r[i + 1]), dtype='complex')
             cur_core = self.tt.core[self.tt.ps[i] - 1:self.tt.ps[i + 1] - 1]
             cur_core = cur_core.reshape(
                 c.r[i], self.n[i], self.m[i], c.r[
