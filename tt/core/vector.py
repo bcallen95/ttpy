@@ -50,7 +50,7 @@ class vector(object):
 
     def __init__(self, a=None, eps=1e-14, rmax=100000):
         if a is None:
-            self.core = _np.array([0.0], dtype=complex)
+            self.core = _np.array([0.0+0.j], dtype=complex)
             self.d = 0
             self.n = _np.array([0], dtype=_np.int32)
             self.r = _np.array([1], dtype=_np.int32)
@@ -554,7 +554,7 @@ class vector(object):
             _np.int32)
 
     def alloc_core(self):
-        self.core = _np.zeros((self.ps[self.d] - 1,), dtype=float)
+        self.core = _np.zeros((self.ps[self.d] - 1,), dtype=complex)
 
     def copy(self):
         c = vector()
