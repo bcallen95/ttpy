@@ -50,7 +50,7 @@ class vector(object):
 
     def __init__(self, a=None, eps=1e-14, rmax=100000):
         if a is None:
-            self.core = _np.array([0.0])
+            self.core = _np.array([0.0], dtype=complex)
             self.d = 0
             self.n = _np.array([0], dtype=_np.int32)
             self.r = _np.array([1], dtype=_np.int32)
